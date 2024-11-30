@@ -1,26 +1,21 @@
-const Sequelize = require('sequelize');
-const database = require('../../../config/db');
+const mongoose = require('mongoose');
 
-const Aluno = database.sequelize.define('Aluno', {
-   id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: true,
-    primaryKey: true,
-    field: 'cod_aluno'
-   },
-   nome: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    field: 'nome'
-   },
-   idade: {
-    type: Sequelize.INTEGER, 
-    allowNull: true
-   }
-}, {
-    tableName: 'aluno',
-    timestamps: false //desabilita o createdAt e updatedAt do sequelize
+// Define o schema de Aluno
+const AlunoSchema = new mongoose.Schema({
+  nome: {
+    type: String,
+    required: true,
+    minlength: 2
+  },
+  idade: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 150
+  }
 });
 
-module.exports = {Aluno};
+// Cria o modelo Aluno
+const Aluno = mongoose.model('Aluno', AlunoSchema);
+
+module.exports = Aluno;

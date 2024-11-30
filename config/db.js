@@ -1,17 +1,17 @@
-const Sequelize = require('sequelize');
-const envConfig = require('./envs-config');
+const mongoose = require("mongoose");
+const envConfig = require("./envs-config");
 
-const sequelizeConfig = {
-    dialect: 'postgres',
-    port: envConfig.database.port,
-    host: envConfig.database.host,
-    logging: console.log
+const connectDB = async () => {
+  try {
+    await mongoose.connect(envConfig.databaseUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Conexão bem-sucedida com o MongoDB");
+  } catch (err) {
+    console.error("Erro ao conectar ao MongoDB:", err.message);
+    process.exit(1); // Finaliza a aplicação se a conexão falhar
+  }
 };
 
-//database, usuario, senha
-const sequelize = new Sequelize(envConfig.database.name, 
-                                envConfig.database.user,
-                                envConfig.database.password, 
-                                sequelizeConfig);
-
-module.exports = {sequelize};
+module.exports = connectDB;

@@ -1,12 +1,24 @@
-const listaProdutos = [];
+const Produto = require('./produto-model');
 
-const save = async (payload) => {
-    listaProdutos.push(payload); // Adiciona o produto à lista
-    return payload; // Retorna o produto cadastrado
+const save = async (produtoData) => {
+  const produto = new Produto(produtoData);
+  return await produto.save();
 };
 
-const list = async () => {
-    return listaProdutos;
+const update = async (id, produtoData) => {
+  return await Produto.findByIdAndUpdate(id, produtoData, { new: true });
 };
 
-module.exports = { save, list };
+const remove = async (id) => {
+  return await Produto.findByIdAndDelete(id);
+};
+
+const list = async (filters) => {
+  return await Produto.find(filters);
+};
+
+const findById = async (id) => {
+  return await Produto.findById(id);
+};
+
+module.exports = { save, update, remove, list, findById };

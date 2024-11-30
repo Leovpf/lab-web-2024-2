@@ -1,91 +1,28 @@
-const Sequelize = require('sequelize');
-const database = require('../../../config/db');
+const mongoose = require('mongoose');
 
-const Produto = database.sequelize.define('Produto', {
-    id: {
-        type: Sequelize.STRING,
-        primaryKey: true,
-        allowNull: false,
-        field: 'id'
-    },
-    nome: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        field: 'nome'
-    },
-    descricao: {
-        type: Sequelize.TEXT,
-        field: 'descricao'
-    },
-    categoria: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        field: 'categoria'
-    },
-    marca: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        field: 'marca'
-    },
-    preco: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        field: 'preco'
-    },
-    quantidadeEstoque: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        field: 'quantidade_estoque'
-    },
-    codigoBarras: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-        field: 'codigo_barras'
-    },
-    altura: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        field: 'altura'
-    },
-    largura: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        field: 'largura'
-    },
-    profundidade: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        field: 'profundidade'
-    },
-    unidadeMedidaDimensao: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        field: 'unidade_medida_dimensao'
-    },
-    pesoValor: {
-        type: Sequelize.FLOAT,
-        allowNull: false,
-        field: 'peso_valor'
-    },
-    unidadeMedidaPeso: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        field: 'unidade_medida_peso'
-    },
-    status: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        field: 'status'
-    },
-    dataCadastro: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        field: 'data_cadastro'
-    }
-}, {
-    tableName: 'produto',
-    timestamps: false
+const ProdutoSchema = new mongoose.Schema({
+  nome: { type: String, required: true, minlength: 2 },
+  descricao: { type: String, required: true },
+  categoria: { type: String, required: true },
+  marca: { type: String, required: true },
+  preco: { type: Number, required: true, min: 0 },
+  quantidadeEstoque: { type: Number, required: true, min: 0 },
+  codigoBarras: { type: String, required: true },
+  dimensoes: {
+    altura: { type: Number, required: true },
+    largura: { type: Number, required: true },
+    profundidade: { type: Number, required: true },
+    unidadeMedida: { type: String, required: true },
+  },
+  peso: {
+    valor: { type: Number, required: true },
+    unidadeMedida: { type: String, required: true },
+  },
+  status: { type: String, enum: ['ativo', 'inativo'], default: 'ativo' },
+  dataCadastro: { type: Date, default: Date.now },
 });
 
-module.exports = { Produto };
+// Cria o modelo Produto
+const Produto = mongoose.model('Produto', ProdutoSchema);
+
+module.exports = Produto;
